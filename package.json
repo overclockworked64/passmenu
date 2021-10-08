@@ -1,0 +1,7 @@
+{
+  "name": "passmenu",
+  "version": "0.1.0",
+  "description": "pass + dmenu",
+  "install": "install -b passmenu ${PREFIX:-/usr/local}/bin/passmenu",
+  "scripts": [ "passmenu" ]
+}

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# gets passwords from ~/.password-store
+# and pipes them to dmenu
+# usage: ./passmenu
+
+shopt -s extglob
+
+get_passwords() {
+    local files=(~/.password-store/*/**)
+    # expand */ to produce a pattern,
+    # and match it against the beginning
+    # of every element of the array.
+    # ## means the result is the longest
+    # matching pattern deleted.
+    for file in "${files[@]}"; do
+        # expand .* to produce a pattern,
+        # and match it against the trailing
+        # portion of the parameter (in this
+        # case, file). 
+        # % means the result is the shortest
+        # matching pattern deleted.
+        dir="${file%/*}"
+        dir="${dir##*/}"
+        filename="${file##*/}"
+        filename="${filename%.*}"
+        printf "%s/%s\n" "$dir" "$filename"
+    done
+}
+
+choice="$(get_passwords | dmenu -l 5)"
+
+if [[ -z "$choice" ]]; then
+    exit 0
+else
+    pass -c "$choice"
+fi
